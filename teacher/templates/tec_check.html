@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<body style="background:#111;">
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+        }
+
+        .sidenav {
+            height: 100%;
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 50px;
+        }
+
+        .sidenav a {
+            padding: 10px 8px 2px 0px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #bebebe;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover, .offcanvas a:focus{
+            color: #ffffff;
+        }
+
+
+    </style>
+  </body>
+
+  <div style="width:150px;float:right;" class="sidenav">
+  <ul>
+                 <li><a href="{% url 'tec_massage' nid=teacher.tec_num %}" target="left">个人信息</a></li>
+                 <li><a href="{% url 'tec_manage' %}" target="left">学生管理</a></li>
+                 <li><a href="{% url 'tec_sign' %}" target="left">发布签到</a></li>
+     </ul>
+ </div>
+
+<iframe src="{% url 'tec_massage' nid=teacher.tec_num %}" name="left" width="1100" height="600" ></iframe>
+
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>学生版</title>
+    </head>
+    <style type="text/css">
+        html,body{
+            margin:0;
+            padding:0;
+            border:0;
+            background-color:#f0f0f0;
+            font-weight:bold;
+            font-family: "Lato", sans-serif;
+        }
+        .myt{
+           background-color: #4f4f4f;
+           color: white;
+           height:40px;
+           font-size:33px;
+           margin-top:20px;
+           text-align:center;
+        }
+        .myd{
+            font-size:23px;
+            width:100%;
+            padding-top:60px;
+            margin-top: 0;
+            padding-left:550px;
+            text-color:#111;
+            background-color:#f0f0f0;
+        }
+        .button{
+            width:100px;
+            height:30px;
+            line-height:18px;
+            border:1;
+            margin:4px 0 0 10px;
+        }
+    </style>
+    <body style="background:#fcfcfc">
+        {% if messages %}
+            <script>
+                {% for msg in messages %}
+                    alert('{{ msg.message }}');
+                {% endfor %}
+            </script>
+        {% endif %}
+        <div class="myt">签到</div>
+        <div class="myd">
+            <form action="/home/stu_sign{{stu_num}}" method="post">
+{#            <form action="{% url 'stu_sign' student.stu_num %}" method="post">#}
+                二维码内容：
+                <input type="text" name="sign_con"/><p>
+                <input type="submit" name="submit" value="提交"/>
+                {% csrf_token %}
+            </form>
+{#            <input name="sign" type="button" id="btn1" value="扫码签到" class="button" onclick="location.href='{% url 'stu_sign' %}'" />#}
+        </div>
+    </body>
+</html>

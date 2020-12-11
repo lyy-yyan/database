@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>教师版</title>
+    <style type="text/css">
+        html,body{
+            margin:0;
+            padding:0;
+            border:0;
+            background-color:#FFF;
+            font-size:20px;
+            font-weight:bold;
+            color:#27649d;
+        }
+        td {
+            vertical-align:middle
+        }
+        input {/*input栏*/
+            font-size:20px;
+            vertical-align:middle;
+            BORDER: #a2c4d7 2px solid;
+            padding:2px;
+        }
+    </style>
+</head>
+    <body>
+        {% if messages %}
+            <script>
+                {% for msg in messages %}
+                    alert('{{ msg.message }}');
+                {% endfor %}
+            </script>
+        {% endif %}
+        <div align="center" style="position:absolute; top:50%; left:50%; width:820px; height:491px; margin-left:-410px; margin-top:-100px;">
+            <h1 style="margin-left:50px; width:220px; background-color: #66b3ff; color: white;">教师登录</h1>
+
+            <form action="tec_check" method="post">
+                账号：
+                <input type="text" name="tec_num"/><p>
+                密码：
+                <input type="password" name="tec_password"/><p>
+                权限号：
+                <input type="password" name="authority"/><p>
+                <input type="submit" name="submit" value="登录"/>
+                {% csrf_token %}
+            </form>
+            <p>
+            <a href="{% url 'tec_regist' %}">如未注册，请先注册</a></p>
+            <a href="{% url 'index' %}">点击进入学生版 </a>
+        </div>
+    </body>
+</html>

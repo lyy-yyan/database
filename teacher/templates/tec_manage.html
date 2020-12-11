@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>老师管理</title>
+    <style type="text/css">
+         body{
+            font-family: "Lato", sans-serif;
+        }
+        a{ text-decoration:none;
+        }
+        td {
+            text-align:center;
+        }
+        .tab{
+            padding-left:46px;
+        }
+        .sn{
+            bottom:35px;
+            margin-left:110px;
+            position:absolute;
+        }
+         #pageStyle{
+         display:inline-block;
+         width:32px;
+         height:32px;
+         border:1px solid #CCC;
+         line-height:32px;
+         text-align:center;
+         color:#999;
+         margin-top:20px;
+         text-decoration:none;
+
+         }
+      #pageStyle:hover{
+          background-color:#CCC;
+          }
+      #pageStyle .active{
+          background-color:#0CF;
+          color:#ffffff;
+          }
+         .style1
+         {
+             font-size: 12pt;
+         }
+
+    </style>
+</head>
+<body style="background:#fcfcfc">
+<h2 style="padding-left:50px">学生信息表：</h2>
+
+<div class="tab">
+    <table border="1px" bordercolor="#000000" cellspacing="0px" style="border-collapse:collapse" id="table1"">
+        <thead>
+        <tr font-weight="bold">
+            <th width="160px">学号</th>
+            <th width="160px">姓名</th>
+            <th width="160px">专业</th>
+            <th width="160px">班级</th>
+            <th width="160px">缺勤次数</th>
+            <th width="150px">密码</th>
+            <th width="40px">编辑</th>
+            <th width="40px">删除</th>
+        </tr>
+        </thead>
+        <tbody id="table2">
+        {% for student in student %}
+           <tr>
+               <td>{{ student.stu_num}}</td>
+               <td>{{ student.stu_name}}</td>
+               <td>{{ student.stu_major}}</td>
+               <td>{{ student.stu_class}}</td>
+               <td>{{ student.abs_sum}}</td>
+               <td>{{ student.stu_password}}</td>
+               <td><input type="button" value="edit"></td>
+               <td><a href="{% url 'del_stu' nid=student.id %}" style="color:#DF013A; font-weight: bold;">x</a> </td>
+           </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div style="float:right;margin-top:10px;">
+<span id="spanFirst">第一页</span>
+<span id="spanPre">上一页</span>
+<span id="spanNext">下一页</span>
+<span id="spanLast">最后一页</span>
+第<span id="spanPageNum"></span>页/共<span id="spanTotalPage"></span>页
+</div>
+    {% if messages %}
+        <script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
+<div class="sn" id="tab">
+    <h3><b>增加学生：</b></h3>
+<form action="tec_manage/" method="post">
+    学号：
+    <input type="text" name="stu_num"/>
+    姓名：
+    <input type="text" name="stu_name"/>
+    专业：
+    <input type="text" name="stu_major"/>
+    班级：
+    <input type="text" name="stu_class"/>
+    <input type="submit" name="submit" value="提交"/>
+    {% csrf_token %}
+</form>
+</div>
+<p>
+</body>
+<script>
+    var theTable = document.getElementById("table2");
+    var totalPage = document.getElementById("spanTotalPage");
+    var pageNum = document.getElementById("spanPageNum");
+
+    var spanPre = document.getElementById("spanPre");
+    var spanNext = document.getElementById("spanNext");
+    var spanFirst = document.getElementById("spanFirst");
+    var spanLast = document.getElementById("spanLast");
+
+    var numberRowsInTable = theTable.rows.length;
+    var pageSize = 13;
+    var page = 1;
+
+    //下一页
+    function next() {
+
+       hideTable();
+
+       currentRow = pageSize * page;
+       maxRow = currentRow + pageSize;
+       if ( maxRow > numberRowsInTable ) maxRow = numberRowsInTable;
+       for ( var i = currentRow; i< maxRow; i++ ) {
+           theTable.rows[i].style.display = '';
+        }
+       page++;
+
+       if ( maxRow == numberRowsInTable )  { nextText(); lastText(); }
+        showPage();
+        preLink();
+        firstLink();
+    }
+
+    //上一页
+    function pre() {
+
+       hideTable();
+
+        page--;
+
+        currentRow = pageSize * page;
+       maxRow = currentRow - pageSize;
+       if ( currentRow > numberRowsInTable ) currentRow = numberRowsInTable;
+       for ( var i = maxRow; i< currentRow; i++ ) {
+          theTable.rows[i].style.display = '';
+        }
+
+
+        if ( maxRow == 0 ) { preText(); firstText(); }
+        showPage();
+       nextLink();
+       lastLink();
+    }
+
+    //第一页
+    function first() {
+        hideTable();
+       page = 1;
+        for ( var i = 0; i<pageSize; i++ ) {
+           theTable.rows[i].style.display = '';
+        }
+       showPage();
+
+        preText();
+       nextLink();
+       lastLink();
+    }
+
+    //最后一页
+    function last() {
+        hideTable();
+        page = pageCount();
+        currentRow = pageSize * (page - 1);
+        for ( var i = currentRow; i<numberRowsInTable; i++ ) {
+            theTable.rows[i].style.display = '';
+        }
+        showPage();
+
+       preLink();
+        nextText();
+        firstLink();
+    }
+
+    function hideTable() {
+        for ( var i = 0; i<numberRowsInTable; i++ ) {
+           theTable.rows[i].style.display = 'none';
+        }
+    }
+
+    function showPage() {
+        pageNum.innerHTML = page;
+    }
+
+    //总共页数
+    function pageCount() {
+        var count = 0;
+        if ( numberRowsInTable%pageSize != 0 ) count = 1;
+       return parseInt(numberRowsInTable/pageSize) + count;
+    }
+
+    //显示链接
+    function preLink() { spanPre.innerHTML = "<a href='javascript:pre();'>上一页</a>"; }
+    function preText() { spanPre.innerHTML = "上一页"; }
+
+    function nextLink() { spanNext.innerHTML = "<a href='javascript:next();'>下一页</a>"; }
+    function nextText() { spanNext.innerHTML = "下一页"; }
+
+    function firstLink() { spanFirst.innerHTML = "<a href='javascript:first();'>第一页</a>"; }
+    function firstText() { spanFirst.innerHTML = "第一页"; }
+
+    function lastLink() { spanLast.innerHTML = "<a href='javascript:last();'>最后一页</a>"; }
+    function lastText() { spanLast.innerHTML = "最后一页"; }
+
+    //隐藏表格
+    function hide() {
+        for ( var i = pageSize; i<numberRowsInTable; i++ ) {
+            theTable.rows[i].style.display = 'none';
+        }
+
+       totalPage.innerHTML = pageCount();
+       pageNum.innerHTML = '1';
+
+        nextLink();
+        lastLink();
+    }
+
+    hide();
+</script>
+<script type="text/javascript" src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+	<script>
+		(function(){
+			$('input[type="button"]').on('click', function(){
+				var $this = $(this),
+					edit_status = $this.attr('edit_status'),
+					status_value = edit_status && 1 == edit_status ? 0 : 1,
+					$td_arr = $this.parent().prevAll('td');
+				$this.val(1 == status_value ? 'ok' : 'edit').attr('edit_status', status_value);
+				$.each($td_arr, function(){
+					var $td = $(this);
+					if(1 == status_value) {
+						$td.html('<input type="text" value="'+$td.html()+'">');
+					} else if(0 == status_value){
+						$td.html($td.find('input[type=text]').val());
+					}
+				});
+			});
+		})();
+	</script>
+</html>

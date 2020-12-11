@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>教师版</title>
+      <style type="text/css">
+        html,body{
+            margin:0;
+            padding:0;
+            border:0;
+            background-color:#f0f0f0;
+            font-weight:bold;
+            font-family: "Lato", sans-serif;
+        }
+        .myt{
+          background-color: #4f4f4f;
+           color: white;
+           height:40px;
+           font-size:33px;
+           margin-top:20px;
+           text-align:center;
+        }
+        .myd{
+            font-size:23px;
+            width:59%;
+            padding-top:60px;
+            margin-top: 0;
+            padding-left:450px;
+            text-color:#111;
+            background-color:#f0f0f0;
+        }
+    </style>
+  </head>
+  <body style="background:#fcfcfc">
+    <div class="myt">用户信息</div>
+    <div class="myd">
+      账号/工号：{{teacher.tec_num}}
+      <p>
+      姓名：{{teacher.tec_name}}
+      </p>
+      教授课程：{{teacher.tec_course}}
+    </div>
+  </body>
+</html>

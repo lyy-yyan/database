@@ -1,0 +1,14 @@
+ body{
+    font-family: "Lato", sans-serif;
+}
+td {
+    text-align:center;
+}
+.tab{
+    padding-left:100px;
+}
+.sn{
+    bottom:25px;
+    margin-left:110px;
+    position:absolute;
+}
